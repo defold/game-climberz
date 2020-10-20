@@ -1,0 +1,38 @@
+local gooey = require "gooey.gooey"
+local monarch = require "monarch.monarch"
+local utils = require "util.utils"
+
+local INFO = [[UNLOCK MORE CHARACTERS BY BECOMING A COIL SUBSCRIBER.
+
+AS A SUBSCRIBER YOU GET INSTANT ACCESS TO EXCLUSIVE CONTENT ON SITES SUCH AS
+
+- IMGUR
+- CINNAMON
+- HACKERNOON
+- DEV.TO
+
+AND IN A GROWING NUMBER OF GAMES.
+]]
+
+function init(self)
+	gooey.acquire_input()
+
+	gui.set_text(gui.get_node("info"), INFO)
+	utils.wobble(gui.get_node("yes"))
+end
+
+function on_input(self, action_id, action)
+	gooey.button("yes", action_id, action, function()
+		sys.open_url("https://coil.com/signup", { target = "_blank" })
+	end)
+	gooey.button("more", action_id, action, function()
+		sys.open_url("https://coil.com", { target = "_blank" })
+	end)
+	gooey.button("no", action_id, action, function()
+		monarch.back()
+	end)
+
+	if action_id == hash("jump") and action.pressed then
+		sys.open_url("https://coil.com/signup", { target = "_blank" })
+	end
+end

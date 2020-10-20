@@ -1,20 +1,22 @@
+local monarch = require "monarch.monarch"
+
 go.property("gravity", vmath.vector3(0, -10000, 0))
 go.property("ground_speed", 450)
 go.property("jump_speed", 1800)
-go.property("diamond_chance", 2)
-go.property("double_spike_chance", 2)
+go.property("pickup_chance", 2)
+go.property("double_danger_chance", 2)
 go.property("safe_radius", 180)
 
 -- distance between the platforms
 local PLATFORM_SPACING = 250
 -- height of a platform (used to set the initial position of the hero)
-local PLATFORM_HEIGHT = 40
+local PLATFORM_HEIGHT = 48
 -- width of the screen, as set in game.project
 local SCREEN_WIDTH = tonumber(sys.get_config("display.width"))
 -- time it should take to move the platforms when the hero is climbing a ladder
 local PLATFORM_MOVE_DURATION = 0.3
 -- we don't want things too close to the edge
-local MARGIN = 30
+local MARGIN = 100
 
 local SAVE_DATA_PATH = sys.get_save_file(sys.get_config("project.title"), "savedata")
 
@@ -31,70 +33,70 @@ local function one_in(chance)
 	return math.random(1, chance) == chance and 1 or 0
 end
 
--- add spikes on a platform
--- the spikes will be created using a factory and the ids of the
--- spikes will be stored in the platform data table
-local function add_spikes(self, platform)
-	local spikes = 1 + one_in(self.double_spike_chance)
-	for i=1,spikes do
-		local spike_id = factory.create("factories#spike", vmath.vector3(random_x(), PLATFORM_HEIGHT / 2, 0))
-		platform.spikes[spike_id] = true
-		msg.post(spike_id, "set_parent", { parent_id = platform.ground_id, keep_world_transform = 0 })
+-- add dangers on a platform
+-- the dangers will be created using a factory and the ids of the
+-- dangers will be stored in the platform data table
+local function add_dangers(self, platform)
+	local dangers = 1 + one_in(self.double_danger_chance)
+	for i=1,dangers do
+		local danger_id = factory.create("factories#danger", vmath.vector3(random_x(), PLATFORM_HEIGHT, 0))
+		platform.dangers[danger_id] = true
+		msg.post(danger_id, "set_parent", { parent_id = platform.ground_id, keep_world_transform = 0 })
 	end
 end
 
--- remove all spikes from a platform
--- the game objects will be deleted and the spikes will be removed
+-- remove all dangers from a platform
+-- the game objects will be deleted and the dangers will be removed
 -- from the platform data
-local function remove_spikes(self, platform)
-	for spike_id,_ in pairs(platform.spikes) do
-		go.delete(spike_id)
-		platform.spikes[spike_id] = nil
+local function remove_dangers(self, platform)
+	for danger_id,_ in pairs(platform.dangers) do
+		go.delete(danger_id)
+		platform.dangers[danger_id] = nil
 	end
 end
 
--- add diamonds to a platform
--- the diamonds will be created using a factory and the ids of the
--- diamonds will be stored in the platform data table and in a separate list
-local function add_diamonds(self, platform)
-	local diamonds = one_in(self.diamond_chance)
-	for i=1,diamonds do
-		local diamond_id = factory.create("factories#diamond", vmath.vector3(random_x(), 110, 0))
-		platform.diamonds[diamond_id] = true
-		self.diamonds[diamond_id] = platform
-		msg.post(diamond_id, "set_parent", { parent_id = platform.ground_id, keep_world_transform = 0 })
+-- add pickups to a platform
+-- the pickups will be created using a factory and the ids of the
+-- pickups will be stored in the platform data table and in a separate list
+local function add_pickups(self, platform)
+	local pickups = one_in(self.pickup_chance)
+	for i=1,pickups do
+		local pickup_id = factory.create("factories#pickup", vmath.vector3(random_x(), 180, 0))
+		platform.pickups[pickup_id] = true
+		self.pickups[pickup_id] = platform
+		msg.post(pickup_id, "set_parent", { parent_id = platform.ground_id, keep_world_transform = 0 })
 	end
 end
 
--- remove a diamond
--- the game object will be deleted and the diamond will be removed
--- from the platform data and from the list of all diamonds
-local function remove_diamond(self, diamond_id)
-	go.delete(diamond_id)
-	local platform = self.diamonds[diamond_id]
-	platform.diamonds[diamond_id] = nil
-	self.diamonds[diamond_id] = nil
+-- remove a pickup
+-- the game object will be deleted and the pickup will be removed
+-- from the platform data and from the list of all pickups
+local function remove_pickup(self, pickup_id)
+	go.delete(pickup_id)
+	local platform = self.pickups[pickup_id]
+	platform.pickups[pickup_id] = nil
+	self.pickups[pickup_id] = nil
 end
 
--- remove all diamonds on a platform
-local function remove_diamonds(self, platform)
-	while next(platform.diamonds) do
-		remove_diamond(self, next(platform.diamonds))
+-- remove all pickups on a platform
+local function remove_pickups(self, platform)
+	while next(platform.pickups) do
+		remove_pickup(self, next(platform.pickups))
 	end
 end
 
 -- randomize the content of a platform
--- will generate spikes and diamonds and randomize their positions
+-- will generate dangers and pickups and randomize their positions
 -- along with the ladder position
 -- the function will also ensure that there is a certain amount of spacing
--- between spikes and the ladder to make it easier to play the game
-local function randomize_platform(self, platform, spikes, diamonds)
-	if spikes then add_spikes(self, platform) end
-	if diamonds then add_diamonds(self, platform) end
+-- between dangers and the ladder to make it easier to play the game
+local function randomize_platform(self, platform, dangers, pickups)
+	if dangers then add_dangers(self, platform) end
+	if pickups then add_pickups(self, platform) end
 	
 	-- create a list of things that we should randomise positions for
 	local things = { platform.ladder_id }
-	for spike_id,_ in pairs(platform.spikes) do table.insert(things, spike_id) end
+	for danger_id,_ in pairs(platform.dangers) do table.insert(things, danger_id) end
 	
 	-- let's start from the left edge and continuously place things, one-by-one from
 	-- left to right with a random spacing that respects the specified safe radius
@@ -125,13 +127,11 @@ end
 local function update_score(self)
 	self.save_data.best_score = math.max(self.save_data.best_score, self.score)
 	sys.save(SAVE_DATA_PATH, self.save_data)
-	label.set_text("hud#score", "Score: " .. tostring(self.score))
-	label.set_text("hud#best_score", "Best Score: " .. tostring(self.save_data.best_score))
+	msg.post("ui", "update_score", { score = self.score, best_score = self.save_data.best_score })
 end
 
 local function show_instructions(self)
 	msg.post("instructions", "enable")
-	msg.post("gametitle", "enable")
 	msg.post("hand", "enable")
 	go.set("hand#sprite", "tint.w", 1)
 	go.animate("hand#sprite", "tint.w", go.PLAYBACK_LOOP_PINGPONG, 0, go.EASING_INOUTCUBIC, 0.4)
@@ -139,39 +139,38 @@ end
 
 local function hide_instructions(self)
 	msg.post("instructions", "disable")
-	msg.post("gametitle", "disable")
 	msg.post("hand", "disable")
 	go.cancel_animations("hand#sprite", "tint.w")
 end
 
 -- start a new game
--- remove any previously created diamonds and spikes on the platforms
--- randomize ladder positions, generate new diamonds and spikes and
+-- remove any previously created pickups and dangers on the platforms
+-- randomize ladder positions, generate new pickups and dangers and
 -- position the hero
 local function new_game(self)
 	self.score = 0
 	update_score(self)
 	show_instructions(self)
 
-	-- cleanup of old spikes and diamonds
+	-- cleanup of old dangers and pickups
 	for _,platform in pairs(self.platforms) do
-		remove_spikes(self, platform)
-		remove_diamonds(self, platform)
+		remove_dangers(self, platform)
+		remove_pickups(self, platform)
 	end
 	
 	-- position and generate the platforms
 	for i = 1, 6 do
 		local ground_id = go.get_id("ground" .. i)
 		local ladder_id = go.get_id("ladder" .. i)
-		local platform = { ground_id = ground_id, ladder_id = ladder_id, diamonds = {}, spikes = {} }
+		local platform = { ground_id = ground_id, ladder_id = ladder_id, pickups = {}, dangers = {} }
 		self.platforms[i] = platform
 		go.set_position(vmath.vector3(SCREEN_WIDTH / 2, PLATFORM_SPACING * i, 0), ground_id)
 		
 		-- randomize the position of the ladder and for all platforms except the first one
-		-- potentially also the add spikes and diamonds
-		local spikes = i > 1
-		local diamonds = i > 1
-		randomize_platform(self, platform, spikes, diamonds)
+		-- potentially also the add dangers and pickups
+		local dangers = i > 1
+		local pickups = i > 1
+		randomize_platform(self, platform, dangers, pickups)
 	end
 	
 	-- position the hero on top of the bottom most platform
@@ -179,21 +178,13 @@ local function new_game(self)
 end
 
 function init(self)
+	local data = monarch.data(hash("game"))
+	local player = data and data.player or "green"
+
+	sprite.play_flipbook("hero#sprite", player .. "_player")
+	
 	msg.post(".", "acquire_input_focus")
 	msg.post("@render:/", "clear_color", { color = vmath.vector4(0xaa / 0xff, 0xea / 0xff, 1.0, 1.0) })
-
-	msg.post("hud#payments", "disable")
-	if webmonetization then
-		print("payments is_monetized", webmonetization.is_monetized())
-		webmonetization.add_listener(function(self, event, data)
-			if event == webmonetization.EVENT_START then
-				msg.post("hud#payments", "enable")
-			elseif event == webmonetization.EVENT_STOP then
-				-- a non paying player, provide this user with the normal game experience
-				msg.post("hud#payments", "disable")
-			end
-		end)
-	end
 		
 	math.randomseed(os.time())
 	-- the velocity of the hero
@@ -207,13 +198,13 @@ function init(self)
 	-- the top of the screen
 	self.platforms = {}
 
-	-- we also keep a separate list of created diamonds
-	-- diamonds are created per platform
-	-- the list of diamonds has the diamond ids as keys and the platforms they belong to
+	-- we also keep a separate list of created pickups
+	-- pickups are created per platform
+	-- the list of pickups has the pickup ids as keys and the platforms they belong to
 	-- as values (ie the same platform objects as in the platforms list above)
-	-- this allows us to quickly look up which platform a diamond belongs to when it is
+	-- this allows us to quickly look up which platform a pickup belongs to when it is
 	-- collected by the player
-	self.diamonds = {}
+	self.pickups = {}
 	
 	self.score = 0
 	self.save_data = sys.load(SAVE_DATA_PATH) or {}
@@ -227,7 +218,7 @@ function update(self, dt)
 	if self.dying then
 		return
 	end
-	
+
 	-- apply gravity and move the hero unless the hero is on a ladder		
 	if not self.ladder_contact then
 		-- apply gravity
@@ -271,8 +262,8 @@ function on_message(self, message_id, message, sender)
 				self.velocity.y = 0
 				self.can_jump = true
 			end
-		-- colliding with a spike - die!
-		elseif message.group == hash("spike") then
+		-- colliding with a danger - die!
+		elseif message.group == hash("danger") then
 			self.dying = true
 			-- create a custom easing function that makes the player "jump" up and then quickly fall down
 			local easing = vmath.vector({ -0.1, -0.15, -0.175, -0.2, -0.175, -0.15, -0.1, 0.0, 0.125, 0.25, 0.5, 0.75, 1.0 })
@@ -299,27 +290,27 @@ function on_message(self, message_id, message, sender)
 						-- move it to the top of the platforms. we also move it to the
 						-- end of the list of platforms to keep the order intact
 						-- Some additional cleanup:
-						-- * remove any diamonds on the platform
-						-- * remove any spikes on the platform
+						-- * remove any pickups on the platform
+						-- * remove any dangers on the platform
 						-- * randomize the platform again
 						if go.get_position(ground_id).y < 0 then
 							local pos = go.get_position(ground_id)
 							pos.y = pos.y + #self.platforms * PLATFORM_SPACING
 							go.set_position(pos, ground_id)
-							remove_diamonds(self, platform)
-							remove_spikes(self, platform)
+							remove_pickups(self, platform)
+							remove_dangers(self, platform)
 							randomize_platform(self, platform, true, true)
 							table.insert(self.platforms, table.remove(self.platforms, i))
 						end
 					end)
 				end
 			end
-		-- colliding with a diamond - remove it!
-		elseif message.group == hash("diamond") then
+		-- colliding with a pickup - remove it!
+		elseif message.group == hash("pickup") then
 			self.score = self.score + 1
 			update_score(self)
 			particlefx.play(msg.url(nil, message.other_id, "particlefx"))
-			remove_diamond(self, message.other_id)
+			remove_pickup(self, message.other_id)
 		end
 	end
 end

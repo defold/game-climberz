@@ -15,7 +15,7 @@ emitters {
     w: 1.0
   }
   tile_source: "/assets/game.atlas"
-  animation: "diamondparticle"
+  animation: "portal_yellowParticle"
   material: "/builtins/materials/particlefx.material"
   blend_mode: BLEND_MODE_ALPHA
   particle_orientation: PARTICLE_ORIENTATION_DEFAULT
@@ -241,4 +241,8 @@ emitters {
     }
   }
   size_mode: SIZE_MODE_MANUAL
+  start_delay_spread: 0.0
+  duration_spread: 0.0
+  stretch_with_velocity: false
+  start_offset: 0.0
 }
