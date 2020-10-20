@@ -25,9 +25,8 @@ function init(self)
 	local monetization = gui.get_node("monetization")
 	gui.set_enabled(monetization, false)
 	if webmonetization then
-		print("payments is_monetized", webmonetization.is_monetized())
 		webmonetization.set_listener(function(self, event, data)
-			if event == webmonetization.EVENT_START then
+			if event == webmonetization.EVENT_START or event == webmonetization.EVENT_PROGRESS then
 				gui.set_enabled(monetization, true)
 				gui.play_flipbook(gui.get_node("grey_player"), "grey_player_idle")
 				gui.play_flipbook(gui.get_node("red_player"), "red_player_idle")
