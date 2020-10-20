@@ -186,7 +186,6 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 	msg.post("@render:/", "clear_color", { color = vmath.vector4(0xaa / 0xff, 0xea / 0xff, 1.0, 1.0) })
 		
-	math.randomseed(os.time())
 	-- the velocity of the hero
 	self.velocity = vmath.vector3(self.ground_speed, 0, 0)
 	
@@ -265,6 +264,7 @@ function on_message(self, message_id, message, sender)
 		-- colliding with a danger - die!
 		elseif message.group == hash("danger") then
 			self.dying = true
+			sound.play("sounds#die")
 			-- create a custom easing function that makes the player "jump" up and then quickly fall down
 			local easing = vmath.vector({ -0.1, -0.15, -0.175, -0.2, -0.175, -0.15, -0.1, 0.0, 0.125, 0.25, 0.5, 0.75, 1.0 })
 			go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, -200, easing, 0.5, 0, function()
@@ -277,6 +277,7 @@ function on_message(self, message_id, message, sender)
 			self.ladder_contact = true
 			if not self.animating then
 				self.animating = true
+				sound.play("sounds#climb")
 				for i,platform in ipairs(self.platforms) do
 					local ground_id = platform.ground_id
 					local ladder_id = platform.ladder_id
@@ -308,6 +309,7 @@ function on_message(self, message_id, message, sender)
 		-- colliding with a pickup - remove it!
 		elseif message.group == hash("pickup") then
 			self.score = self.score + 1
+			sound.play("sounds#pickup")
 			update_score(self)
 			particlefx.play(msg.url(nil, message.other_id, "particlefx"))
 			remove_pickup(self, message.other_id)

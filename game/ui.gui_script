@@ -7,7 +7,6 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("update_score") then
-		pprint(message)
 		gui.set_text(gui.get_node("score"), "SCORE: " .. tostring(message.score))
 		gui.set_text(gui.get_node("best_score"), "BEST SCORE: " .. tostring(message.best_score or 0))
 	end

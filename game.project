@@ -24,11 +24,18 @@ shared_state = 1
 include_dirs = 
 
 [android]
-package = com.britzl.examples.mikedangers
+package = com.defold.game.climberz
 
 [ios]
-bundle_identifier = com.britzl.examples.mikedangers
+bundle_identifier = com.defold.game.climberz
 
 [osx]
-bundle_identifier = com.britzl.examples.mikedangers
+bundle_identifier = com.defold.game.climberz
+
+[webmonetization]
+payment_pointer = $ilp.uphold.com/QkG86UgXzKq8
+
+[html5]
+show_fullscreen_button = 0
+show_made_with_defold = 0
 
