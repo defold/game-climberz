@@ -1,5 +1,5 @@
 font: "/assets/fonts/ARCO for OSX.otf"
-material: "/builtins/fonts/label-df.material"
+material: "/builtins/fonts/font-df.material"
 size: 50
 antialias: 1
 alpha: 1.0

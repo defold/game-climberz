@@ -77,6 +77,14 @@ function on_input(self, action_id, action)
 	end
 
 	gooey.button("defold", action_id, action, function()
-		sys.open_url("https://www.defold.com")
+		sys.open_url("https://www.defold.com", { target = "_blank" })
+	end)
+
+	gooey.button("kenney", action_id, action, function()
+		sys.open_url("https://kenney.nl", { target = "_blank" })
+	end)
+
+	gooey.button("monetization", action_id, action, function()
+		sys.open_url("https://defold.com/manuals/web-monetization/", { target = "_blank" })
 	end)
 end

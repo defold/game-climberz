@@ -1,7 +1,7 @@
 [project]
 title = Climberz
 version = 1.0
-dependencies = https://github.com/defold/extension-webmonetization/archive/1.0.1.zip,https://github.com/britzl/monarch/archive/3.2.1.zip,https://github.com/britzl/gooey/archive/8.1.0.zip
+dependencies = https://github.com/defold/extension-webmonetization/archive/1.0.2.zip,https://github.com/britzl/monarch/archive/3.2.1.zip,https://github.com/britzl/gooey/archive/8.1.0.zip
 
 [bootstrap]
 main_collection = /loader/loader.collectionc
@@ -38,4 +38,12 @@ payment_pointer = $ilp.uphold.com/QkG86UgXzKq8
 [html5]
 show_fullscreen_button = 0
 show_made_with_defold = 0
+heap_size = 128
+scale_mode = downscale_fit
+
+[graphics]
+texture_profiles = /release.texture_profiles
+
+[native_extension]
+app_manifest = /release.appmanifest
 
