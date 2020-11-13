@@ -1,3 +1,6 @@
+#
+# Defold data files
+#
 *.atlas linguist-language=Protocol-Buffer
 *.collection linguist-language=Protocol-Buffer
 *.factory linguist-language=Protocol-Buffer
@@ -10,7 +13,15 @@
 *.sprite linguist-language=Protocol-Buffer
 *.tilemap linguist-language=Protocol-Buffer
 *.tilesource linguist-language=Protocol-Buffer
+
+#
+# Defold script files
+#
 *.script linguist-language=Lua
+*.script linguist-detectable=true
 *.gui_script linguist-language=Lua
+*.gui_script linguist-detectable=true
 *.render_script linguist-language=Lua
+*.render_script linguist-detectable=true
 *.editor_script linguist-language=Lua
+*.editor_script linguist-detectable=true
