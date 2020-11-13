@@ -1,0 +1,16 @@
+*.atlas linguist-language=Protocol-Buffer
+*.collection linguist-language=Protocol-Buffer
+*.factory linguist-language=Protocol-Buffer
+*.font linguist-language=Protocol-Buffer
+*.go linguist-language=Protocol-Buffer
+*.gui linguist-language=Protocol-Buffer
+*.input_binding linguist-language=Protocol-Buffer
+*.particlefx linguist-language=Protocol-Buffer
+*.render linguist-language=Protocol-Buffer
+*.sprite linguist-language=Protocol-Buffer
+*.tilemap linguist-language=Protocol-Buffer
+*.tilesource linguist-language=Protocol-Buffer
+*.script linguist-language=Lua
+*.gui_script linguist-language=Lua
+*.render_script linguist-language=Lua
+*.editor_script linguist-language=Lua
