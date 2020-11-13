@@ -18,10 +18,6 @@
 # Defold script files
 #
 *.script linguist-language=Lua
-*.script linguist-detectable=true
 *.gui_script linguist-language=Lua
-*.gui_script linguist-detectable=true
 *.render_script linguist-language=Lua
-*.render_script linguist-detectable=true
 *.editor_script linguist-language=Lua
-*.editor_script linguist-detectable=true
