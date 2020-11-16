@@ -13,6 +13,16 @@ local function select_player(self, player)
 	gui.play_flipbook(node, self.player .. "_player")
 end
 
+local function unlock_players(self)
+	gui.play_flipbook(gui.get_node("grey_player"), "grey_player_idle")
+	gui.play_flipbook(gui.get_node("red_player"), "red_player_idle")
+end
+
+local function lock_players(self)
+	gui.play_flipbook(gui.get_node("grey_player"), "locked")
+	gui.play_flipbook(gui.get_node("red_player"), "locked")
+end
+
 local function is_monetized()
 	return webmonetization and webmonetization.is_monetized()
 end
@@ -28,14 +38,14 @@ function init(self)
 		webmonetization.set_listener(function(self, event, data)
 			if event == webmonetization.EVENT_START or event == webmonetization.EVENT_PROGRESS then
 				gui.set_enabled(monetization, true)
-				gui.play_flipbook(gui.get_node("grey_player"), "grey_player_idle")
-				gui.play_flipbook(gui.get_node("red_player"), "red_player_idle")
+				unlock_players(self)
 			elseif event == webmonetization.EVENT_STOP then
 				gui.set_enabled(monetization, false)
-				gui.play_flipbook(gui.get_node("grey_player"), "locked")
-				gui.play_flipbook(gui.get_node("red_player"), "locked")
+				lock_players(self)
 			end
 		end)
+	else
+		unlock_players(self)
 	end
 
 	select_player(self, "green")
@@ -58,7 +68,7 @@ function on_input(self, action_id, action)
 		select_player(self, "blue")
 	end)
 
-	if is_monetized() then
+	if is_monetized() or not webmonetization then
 		gooey.button("grey_player", action_id, action, function()
 			select_player(self, "grey")
 		end)
