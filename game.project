@@ -1,10 +1,11 @@
 [project]
 title = Climberz
-version = 1.0
+version = 1.0.3
 dependencies = https://github.com/defold/extension-webmonetization/archive/1.0.2.zip,https://github.com/britzl/monarch/archive/3.2.1.zip,https://github.com/britzl/gooey/archive/8.1.0.zip
 
 [bootstrap]
 main_collection = /loader/loader.collectionc
+render = /builtins/render/default.renderc
 
 [input]
 game_binding = /input/game.input_bindingc
@@ -27,7 +28,13 @@ include_dirs =
 package = com.defold.game.climberz
 
 [ios]
-bundle_identifier = com.defold.game.climberz
+bundle_identifier = com.defold.littleclimberz
+app_icon_76x76 = /assets/icons/icon_76.png
+app_icon_152x152 = /assets/icons/icon_152.png
+app_icon_167x167 = /assets/icons/icon_167.png
+app_icon_120x120 = /assets/icons/icon_120.png
+app_icon_180x180 = /assets/icons/icon_180.png
+icons_asset = /assets/icons/Assets.car
 
 [osx]
 bundle_identifier = com.defold.game.climberz
