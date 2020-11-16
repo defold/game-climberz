@@ -165,7 +165,7 @@ nodes {
   text: "BEST SCORE: 1234"
   font: "game"
   id: "best_score"
-  xanchor: XANCHOR_LEFT
+  xanchor: XANCHOR_RIGHT
   yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_SE
   outline {
