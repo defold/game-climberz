@@ -159,7 +159,7 @@ local function new_game(self)
 	end
 	
 	-- position and generate the platforms
-	for i = 1, 6 do
+	for i = 1, 7 do
 		local ground_id = go.get_id("ground" .. i)
 		local ladder_id = go.get_id("ladder" .. i)
 		local platform = { ground_id = ground_id, ladder_id = ladder_id, pickups = {}, dangers = {} }

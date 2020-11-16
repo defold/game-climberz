@@ -245,6 +245,47 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "ground7"
+  prototype: "/game/ground.go"
+  children: "ladder7"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "ladder7"
+  prototype: "/game/ladder.go"
+  position {
+    x: -300.0
+    y: -58.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "level"
@@ -255,6 +296,7 @@ embedded_instances {
   children: "ground4"
   children: "ground5"
   children: "ground6"
+  children: "ground7"
   children: "hero"
   children: "particles"
   data: ""

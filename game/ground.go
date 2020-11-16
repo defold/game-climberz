@@ -1,5 +1,5 @@
 embedded_components {
-  id: "sprite"
+  id: "ground1"
   type: "sprite"
   data: "tile_set: \"/assets/game.atlas\"\n"
   "default_animation: \"ground\"\n"
@@ -56,6 +56,86 @@ embedded_components {
   position {
     x: 0.0
     y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "signleft"
+  type: "sprite"
+  data: "tile_set: \"/assets/game.atlas\"\n"
+  "default_animation: \"signLeft\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 354.0
+    y: 60.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "ground2"
+  type: "sprite"
+  data: "tile_set: \"/assets/game.atlas\"\n"
+  "default_animation: \"ground\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: -800.0
+    y: 6.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "ground3"
+  type: "sprite"
+  data: "tile_set: \"/assets/game.atlas\"\n"
+  "default_animation: \"ground\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 800.0
+    y: 6.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "signright"
+  type: "sprite"
+  data: "tile_set: \"/assets/game.atlas\"\n"
+  "default_animation: \"signRight\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: -354.0
+    y: 60.0
     z: 0.0
   }
   rotation {
