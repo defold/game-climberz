@@ -1,6 +1,6 @@
 [project]
 title = Climberz
-version = 1.0.3
+version = 1.0.4
 dependencies = https://github.com/defold/extension-webmonetization/archive/1.0.2.zip,https://github.com/britzl/monarch/archive/3.2.1.zip,https://github.com/britzl/gooey/archive/8.1.0.zip
 
 [bootstrap]
@@ -22,7 +22,7 @@ debug = 0
 shared_state = 1
 
 [library]
-include_dirs = 
+include_dirs =
 
 [android]
 package = com.defold.game.climberz
@@ -53,4 +53,3 @@ texture_profiles = /release.texture_profiles
 
 [native_extension]
 app_manifest = /release.appmanifest
-
