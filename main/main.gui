@@ -210,7 +210,8 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "CLIMBERZ"
+  text: "LITTLE\n"
+  "CLIMBERZ"
   font: "game"
   id: "title"
   xanchor: XANCHOR_NONE
@@ -229,7 +230,7 @@ nodes {
     w: 1.0
   }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
+  line_break: true
   parent: "root"
   layer: ""
   inherit_alpha: true
@@ -298,7 +299,7 @@ nodes {
 nodes {
   position {
     x: 320.0
-    y: 568.0
+    y: 523.0
     z: 0.0
     w: 1.0
   }
@@ -691,7 +692,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 0.0
+    y: 28.0
     z: 0.0
     w: 1.0
   }
