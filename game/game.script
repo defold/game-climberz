@@ -12,13 +12,13 @@ local PLATFORM_SPACING = 250
 -- height of a platform (used to set the initial position of the hero)
 local PLATFORM_HEIGHT = 48
 -- width of the screen, as set in game.project
-local SCREEN_WIDTH = tonumber(sys.get_config("display.width"))
+local SCREEN_WIDTH = sys.get_config_int("display.width")
 -- time it should take to move the platforms when the hero is climbing a ladder
 local PLATFORM_MOVE_DURATION = 0.3
 -- we don't want things too close to the edge
 local MARGIN = 100
 
-local SAVE_DATA_PATH = sys.get_save_file(sys.get_config("project.title"), "savedata")
+local SAVE_DATA_PATH = sys.get_save_file(sys.get_config_string("project.title"), "savedata")
 
 -- generate a random horizontal position on the screen
 -- with an optional margin to the screen edges
